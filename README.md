@@ -14,8 +14,8 @@ Say-Do is a small, common shape for that report. A bot says what it did, for who
   "onBehalfOf": { "id": "urn:example:business:0001" },
   "action": "sent",
   "what": "review request",
-  "subject": { "tool": "Jobber", "id": "c-5521" },
-  "records": [ { "tool": "Jobber", "kind": "message", "id": "msg-88412" } ],
+  "subject": { "tool": "getjobber.com", "id": "c-5521" },
+  "records": [ { "tool": "getjobber.com", "kind": "message", "id": "msg-88412" } ],
   "saidAt": "2026-11-16T18:02:00-08:00"
 }
 ```
@@ -29,7 +29,7 @@ A verifier reads `msg-88412` in Jobber and reports one of: **matched**, **matche
 | [`SPEC.md`](SPEC.md) | The format, the rules, and the minimum a verifier must check |
 | [`schema/claim.schema.json`](schema/claim.schema.json) | JSON Schema (2020-12) for one claim |
 | [`saydo.js`](saydo.js) | Reference validator and checker. No dependencies |
-| [`examples/`](examples/) | One synthetic day of claims from a made-up plumbing business, and the records they're checked against |
+| [`examples/`](examples/) | One synthetic day of claims from a made-up plumbing business, the records they're checked against, and **conformance vectors** (`vectors.json`): claims, records and expected results, including the attacks below |
 | [`saydo.test.js`](saydo.test.js) | Tests: `node --test` (Node 20 or later) |
 
 ## Status
@@ -41,6 +41,26 @@ Open questions:
 - Is the action list right for your bot? What did you need `other` for?
 - Where can your bot publish claims so a business's verifier can read them: a note on the record, or an API?
 - Bindings: what's the right A2A extension URI and OpenTelemetry attribute names?
+
+## Questions we expect
+
+**Isn't this just another standard?** Bots already speak A2A, MCP and OpenTelemetry, and Say-Do rides on them rather than replacing them. None of them has a field for the record an action wrote, kept apart from any verdict. That one pointer is what Say-Do adds. If an existing standard adds it, we'll point there.
+
+**Can't a bot claim credit for a record it didn't write?** A match needs the record to be the right kind, about the right subject, made no earlier than the work, and not shown by the tool as made by another app or by a person in the tool's own screens. When the tool doesn't say who made it, the result carries "author not shown".
+
+**Can't a bot point at an old record?** No. A record older than the work doesn't count.
+
+**Can't a bot just claim its successes and stay quiet about the rest?** Yes, and it'll look perfect. Say-Do measures say vs do. A verifier also has to check, from the records, the work that should have happened. Say-Do says so plainly (SPEC §4).
+
+**Without signatures, can't anyone forge claims in a bot's name?** A verifier counts a claim for a bot only when it reads it from where the business connected that bot, never from the `actor` field alone. Signatures are planned.
+
+**Can't a bot edit or backdate a claim?** A published claim never changes; a re-read with different content is flagged. A claim dated after the verifier first read it is invalid. One first read long after its date is flagged "published late". A correction can't erase a miss that was already checked.
+
+**What stops a claim flood?** Size limits and a daily cap per bot, with unchecked claims reported as unchecked, never as matched.
+
+**Why would a bot maker adopt it?** A bot whose claims check out can show it. "92% of what it said, the records show" is a better pitch than "trust us".
+
+**Who decides changes?** Issues and pull requests here, in the open. If others adopt it, we'll move it to a neutral home.
 
 ## Principles
 

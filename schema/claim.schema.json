@@ -161,13 +161,17 @@
       ],
       "properties": {
         "tool": {
-          "type": "string"
+          "type": "string",
+          "description": "The vendor's web domain, e.g. getjobber.com"
         },
         "id": {
           "type": "string",
           "minLength": 1
         },
         "label": {
+          "type": "string"
+        },
+        "account": {
           "type": "string"
         }
       }
@@ -185,7 +189,8 @@
         "properties": {
           "tool": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "The vendor's web domain, e.g. getjobber.com"
           },
           "kind": {
             "enum": [
@@ -213,9 +218,13 @@
           },
           "version": {
             "type": "string"
+          },
+          "account": {
+            "type": "string"
           }
         }
-      }
+      },
+      "maxItems": 20
     },
     "source": {
       "type": "object",
@@ -251,6 +260,13 @@
     },
     "statement": {
       "type": "string"
+    },
+    "ext": {
+      "type": "object",
+      "description": "Extensions, keyed by reverse domain. Never changes a result.",
+      "propertyNames": {
+        "pattern": "^[a-z0-9-]+(\\.[a-z0-9-]+)+$"
+      }
     }
   },
   "if": {
@@ -265,5 +281,5 @@
       "what"
     ]
   },
-  "$comment": "Not expressible here and checked by the reference validator: doneAt must not be later than saidAt."
+  "$comment": "Checked by the reference validator, not expressible here: doneAt must not be later than saidAt. Limits a verifier MAY apply: 16 KB per claim, 20 records."
 }

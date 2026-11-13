@@ -16,7 +16,7 @@ export const UNREADABLE = Symbol("unreadable");
 
 const KINDS = ["bot", "person"];
 const SOURCE_KINDS = ["sms", "email", "call", "chat", "task", "schedule"];
-const ALLOWED = ["saydo", "id", "parent", "actor", "onBehalfOf", "delegation", "action", "what", "subject", "records", "source", "saidAt", "doneAt", "statement"];
+const ALLOWED = ["saydo", "id", "parent", "actor", "onBehalfOf", "delegation", "action", "what", "subject", "records", "source", "saidAt", "doneAt", "statement", "ext"];
 const isObj = (x) => x !== null && typeof x === "object" && !Array.isArray(x);
 const isStr = (x) => typeof x === "string" && x.length > 0;
 const isUri = (x) => isStr(x) && /^[A-Za-z][A-Za-z0-9+.-]*:.+$/.test(x);
@@ -30,6 +30,7 @@ export function validate(c) {
     if (["verified", "verdict", "success", "succeeded", "outcome", "result"].includes(k)) p.push(`"${k}" isn't allowed: a claim is never a verdict.`);
     else if (!ALLOWED.includes(k)) p.push(`Unknown field "${k}".`);
   }
+  if (c.ext !== undefined && !isObj(c.ext)) p.push("ext is an object.");
   if (c.saydo !== VERSION) p.push(`saydo must be "${VERSION}".`);
   if (!isUri(c.id)) p.push("id must be unique everywhere: a UUID URN or another URI.");
   if (c.parent !== undefined && !(isObj(c.parent) && isUri(c.parent.id) && isUri(c.parent.actor) && RELATIONS.includes(c.parent.relation)))
@@ -55,42 +56,93 @@ export function validate(c) {
   return p;
 }
 
+export const DEFAULTS = { toleranceMinutes: 60, lookbackDays: 7 }; // reference values; guesses to be tuned (SPEC §4)
+const MIN = 60000;
+
 /**
- * Checks one claim against the records (SPEC §4, the minimum). Never reads `statement` or any label.
- * read(tool, id)  -> a record, null (not there), or UNREADABLE.
- *                    A record: { tool, id, kind, subjectId, at, deleted? }. subjectId is in the claim's subject
- *                    namespace: the reader applies the verifier's own map between tools; never a name.
- * search(claim)   -> records about the claim's subject id (optional; used only when the claim points to none).
- * Returns { id, result, record?, why, notes }.
+ * Checks one claim against the records (SPEC §4, the minimum). Never reads `statement`, `ext` or any label.
+ * read(tool, id, account) -> a record, null (not there), or UNREADABLE. A record:
+ *   { tool, id, kind, subjectId, createdAt, changedAt?, by? }
+ *   subjectId is in the claim's subject namespace: the reader applies the verifier's own map between tools; never a name.
+ *   by (optional, when the tool says who made it): { via: "api" | "ui", app?: <actor id the verifier mapped it to> }
+ * search(claim) -> records about the claim's subject id (optional; only used when the claim points to none).
+ * opts: { checkedAt, toleranceMinutes, lookbackDays }
+ * Returns { id, result, why, notes, records, checkedAt, settings }.
  */
-export function check(claim, read, search) {
+export function check(claim, read, search, opts = {}) {
+  const settings = { toleranceMinutes: opts.toleranceMinutes ?? DEFAULTS.toleranceMinutes, lookbackDays: opts.lookbackDays ?? DEFAULTS.lookbackDays };
+  const out = (result, why, recs = [], extra = []) => ({ id: claim.id, result, why, notes: [...new Set([...extra, ...noteFor(recs)])], records: recs, checkedAt: opts.checkedAt ?? null, settings });
   const allowed = BACKED_BY[claim.action];
-  const agrees = (r, kind) => r && r !== UNREADABLE && (!kind || r.kind === kind) && (!allowed || allowed.includes(r.kind)) && r.subjectId === claim.subject.id;
-  const notes = (r) => [
-    ...(r && r.at && Date.parse(r.at) > Date.parse(claim.saidAt) ? ["said before the record existed"] : []),
+  const earliest = claim.doneAt ? Date.parse(claim.doneAt) - settings.toleranceMinutes * MIN
+                                : Date.parse(claim.saidAt) - settings.lookbackDays * 1440 * MIN;
+  const noteFor = (recs) => [
+    ...(recs.some(r => Date.parse(r.changedAt || r.createdAt) > Date.parse(claim.saidAt)) ? ["said before the record existed"] : []),
+    ...(recs.some(r => !r.by || (!r.by.app && r.by.via !== "ui")) ? ["author not shown"] : []),
     ...(claim.action === "other" ? ["weak: action is other"] : []),
   ];
-  const tools = [...new Set(claim.records.map(p => p.tool))].join(" or ");
+  /** The four tests, plus who wrote it. Returns null if the record passes, else why not. */
+  const fails = (r, kind) => {
+    if (!r) return "isn't there";
+    if ((kind && r.kind !== kind) || (allowed && !allowed.includes(r.kind))) return "is the wrong kind of record";
+    if (r.subjectId !== claim.subject.id) return "is about someone else";
+    const t = Date.parse(claim.action === "updated" ? (r.changedAt || r.createdAt) : r.createdAt);
+    if (t < earliest) return "is older than the work";
+    if (r.by?.app && r.by.app !== claim.actor.id) return "was written by another app";
+    if (r.by?.via === "ui" && claim.actor.kind === "bot") return "was made by a person in the tool's own screens";
+    return null;
+  };
 
-  if (claim.records.length > 0) {
-    const found = claim.records.map(p => ({ p, r: read(p.tool, p.id) }));
-    const hit = found.find(({ p, r }) => agrees(r, p.kind));
-    if (hit) return { id: claim.id, result: "matched", record: hit.r, why: "The record it points to is there and agrees.", notes: notes(hit.r) };
-    if (claim.action === "deleted") return { id: claim.id, result: "cant_check", why: `${tools} keeps no record of the deletion.`, notes: notes() };
-    if (found.every(({ r }) => r === UNREADABLE)) return { id: claim.id, result: "cant_check", why: `Couldn't read ${tools}.`, notes: notes() };
-    if (found.some(({ r }) => r && r !== UNREADABLE)) return { id: claim.id, result: "no_match", why: `A record is in ${tools}, but it doesn't agree with the claim.`, notes: notes() };
-    return { id: claim.id, result: "no_match", why: `No match in ${tools}.`, notes: notes() };
+  if (claim.records.length === 0) {
+    if (claim.action === "deleted") return out("cant_check", "A deletion with no record pointer can't be checked.");
+    const hit = (search ? search(claim) : []).find(r => !fails(r));
+    return hit ? out("matched_by_search", "Found by the subject's id; the claim pointed to no record.", [hit])
+               : out("no_match", "No record pointer, and no record found for the subject.");
   }
-  if (claim.action === "deleted") return { id: claim.id, result: "cant_check", why: "A deletion with no record pointer can't be checked.", notes: notes() };
-  const hit = (search ? search(claim) : []).find(r => agrees(r));
-  return hit
-    ? { id: claim.id, result: "matched_by_search", record: hit, why: "Found by the subject's id; the claim pointed to no record.", notes: notes(hit) }
-    : { id: claim.id, result: "no_match", why: "No record pointer, and no record found for the subject.", notes: notes() };
+  const found = claim.records.map(p => ({ p, r: read(p.tool, p.id, p.account) }));
+  const tools = [...new Set(claim.records.map(p => p.tool))].join(" or ");
+  if (found.some(({ r }) => r === UNREADABLE)) return out("cant_check", `Couldn't read ${tools}.`);
+  if (claim.action === "deleted" && found.some(({ r }) => !r)) return out("cant_check", `${tools} keeps no record of the deletion.`);
+  const bad = found.map(({ p, r }) => fails(r, p.kind)).filter(Boolean);
+  const recs = found.map(({ r }) => r).filter(Boolean);
+  if (bad.length === 0) return out("matched", "Every record it points to is there and agrees.", recs);
+  if (found.length === 1) return out("no_match", bad[0] === "isn't there" ? `No match in ${tools}.` : `The record ${bad[0]}.`, recs);
+  return out("no_match", `${found.length - bad.length} of ${found.length} records agree; one ${bad[0]}.`, recs);
 }
 
-/** Claims still standing: a claim corrected by a later one from the same actor drops out (it stays on file). */
-export function standing(claims) {
-  const corrected = new Set(claims.filter(c => c.parent?.relation === "corrects" && c.parent.actor === c.actor.id).map(c => c.parent.id));
+/** Claim validity against when the verifier first read it (SPEC §3, rule 10). Problems as sentences. */
+export function validateSeen(claim, firstSeenAt, opts = {}) {
+  const tol = (opts.toleranceMinutes ?? DEFAULTS.toleranceMinutes) * MIN;
+  return Date.parse(claim.saidAt) > Date.parse(firstSeenAt) + tol ? ["saidAt is later than when the claim was first read."] : [];
+}
+
+/** Notes from when the verifier first read a claim: published late (SPEC §3, rule 10). */
+export function seenNotes(claim, firstSeenAt, opts = {}) {
+  const lookback = (opts.lookbackDays ?? DEFAULTS.lookbackDays) * 1440 * MIN;
+  return Date.parse(firstSeenAt) - Date.parse(claim.saidAt) > lookback ? ["published late"] : [];
+}
+
+/** True if a re-read claim differs from the first version read (SPEC §3, rule 8). Key order doesn't matter. */
+export function changedAfterPublication(first, again) {
+  const canon = (x) => JSON.stringify(x, (k, v) => isObj(v) ? Object.fromEntries(Object.keys(v).sort().map(key => [key, v[key]])) : v);
+  return first.id === again.id && canon(first) !== canon(again);
+}
+
+/** Records pointed to by more than one actor: "tool|account|id" -> [actor ids]. */
+export function contested(claims) {
+  const by = new Map();
+  for (const c of claims) for (const p of c.records) {
+    const key = [p.tool, p.account || "", p.id].join("|");
+    by.set(key, [...new Set([...(by.get(key) || []), c.actor.id])]);
+  }
+  return new Map([...by].filter(([, actors]) => actors.length > 1));
+}
+
+/**
+ * Claims still standing. A correction from the same actor replaces the original only if the original
+ * wasn't checked yet (SPEC §3, rule 9); otherwise both count. Everything stays on file.
+ */
+export function standing(claims, checkedIds = new Set()) {
+  const corrected = new Set(claims.filter(c => c.parent?.relation === "corrects" && c.parent.actor === c.actor.id && !checkedIds.has(c.parent.id)).map(c => c.parent.id));
   return claims.filter(c => !corrected.has(c.id));
 }
 
@@ -107,14 +159,15 @@ export function summarize(claims, results) {
   const groups = new Map();
   for (const c of claims) {
     const key = [c.actor.id, c.action, c.what || ""].join("|");
-    const g = groups.get(key) || { actor: c.actor.name || c.actor.id, action: c.action, what: c.what || null, claimed: 0, matched: 0, matchedBySearch: 0, cantCheck: 0, saidAt: c.saidAt, items: [] };
+    const g = groups.get(key) || { actor: c.actor.name || c.actor.id, action: c.action, what: c.what || null, claimed: 0, matched: 0, matchedBySearch: 0, cantCheck: 0, notChecked: 0, saidAt: c.saidAt, items: [] };
     const r = byId.get(c.id);
     g.claimed++;
     if (r?.result === "matched") g.matched++;
     if (r?.result === "matched_by_search") g.matchedBySearch++;
     if (r?.result === "cant_check") g.cantCheck++;
+    if (!r) g.notChecked++;
     if (Date.parse(c.saidAt) > Date.parse(g.saidAt)) g.saidAt = c.saidAt;
-    g.items.push({ claim: c.id, subject: c.subject.label || c.subject.id, result: r?.result || "not_checked", record: r?.record || null, notes: r?.notes || [] });
+    g.items.push({ claim: c.id, subject: c.subject.label || c.subject.id, result: r?.result || "not_checked", records: r?.records || [], notes: r?.notes || [] });
     groups.set(key, g);
   }
   return [...groups.values()];
