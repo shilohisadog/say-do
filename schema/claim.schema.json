@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/shilohisadog/say-do/schema/claim.schema.json",
-  "title": "Say-Do claim v0.1",
+  "title": "Say-Do claim v0.2",
   "description": "What a bot says it did, with a pointer to the record it wrote. A claim is a statement, not a fact.",
   "type": "object",
   "additionalProperties": false,
@@ -17,7 +17,7 @@
   ],
   "properties": {
     "saydo": {
-      "const": "0.1"
+      "const": "0.2"
     },
     "id": {
       "type": "string",
@@ -143,8 +143,11 @@
         "sent",
         "called",
         "booked",
+        "canceled",
+        "assigned",
         "invoiced",
         "paid",
+        "refunded",
         "deleted",
         "other"
       ]
@@ -202,6 +205,7 @@
               "estimate",
               "invoice",
               "payment",
+              "refund",
               "message",
               "call",
               "note",

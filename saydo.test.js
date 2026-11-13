@@ -14,7 +14,7 @@ const search = (c) => records.filter(r => r.subjectId === c.subject.id);
 const base = claims[0]; // a booked visit that's in the records
 const ramos = claims.find(c => c.subject.label === "K. Ramos");
 
-test("every example claim is valid v0.1", () => {
+test("every example claim is valid for this version", () => {
   for (const c of claims) assert.deepEqual(validate(c), [], c.id);
 });
 

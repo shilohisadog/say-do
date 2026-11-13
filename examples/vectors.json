@@ -8,7 +8,7 @@
     {
       "name": "Matched: the record is there, the right kind, about the subject, made after the work began, by this bot",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -71,7 +71,7 @@
     {
       "name": "Author not shown: matched, with a note",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -132,7 +132,7 @@
     {
       "name": "Matched by search: no pointer, but a record for the subject's id; never counted as matched",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -189,7 +189,7 @@
     {
       "name": "Credit stealing: a person made the record in the tool's own screens",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -250,7 +250,7 @@
     {
       "name": "Credit stealing: another app made the record",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -312,7 +312,7 @@
     {
       "name": "Stale record: made a week before the work",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -374,7 +374,7 @@
     {
       "name": "Stale record with no doneAt: older than the lookback window",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -435,7 +435,7 @@
     {
       "name": "About someone else",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -497,7 +497,7 @@
     {
       "name": "Wrong kind for the action",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -559,7 +559,7 @@
     {
       "name": "Two pointers, one bad: no match",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -626,7 +626,7 @@
     {
       "name": "Tool unreadable: can't check",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -682,7 +682,7 @@
     {
       "name": "Deleted, and the tool keeps no trace: can't check",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -732,7 +732,7 @@
     {
       "name": "Updated, but the record was last changed long before: no match",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -795,7 +795,7 @@
     {
       "name": "Updated recently: matched",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -859,7 +859,7 @@
     {
       "name": "Said before the record existed: matched, with a note",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -924,7 +924,7 @@
     {
       "name": "Injected wording changes nothing",
       "claim": {
-        "saydo": "0.1",
+        "saydo": "0.2",
         "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
         "actor": {
           "kind": "bot",
@@ -982,6 +982,322 @@
       "expect": {
         "result": "matched",
         "notes": []
+      }
+    },
+    {
+      "name": "Canceled: the visit changed when the bot says it canceled it",
+      "claim": {
+        "saydo": "0.2",
+        "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
+        "actor": {
+          "kind": "bot",
+          "id": "urn:example:bot:receptionist-01",
+          "name": "AI receptionist",
+          "maker": "Example Voice"
+        },
+        "onBehalfOf": {
+          "id": "urn:example:business:0001",
+          "label": "Rivera Plumbing & Drain"
+        },
+        "delegation": [
+          {
+            "kind": "person",
+            "id": "urn:example:person:0001",
+            "label": "the owner"
+          }
+        ],
+        "action": "canceled",
+        "what": "visit",
+        "subject": {
+          "tool": "getjobber.com",
+          "id": "c-6101",
+          "label": "M. Silva"
+        },
+        "records": [
+          {
+            "tool": "getjobber.com",
+            "kind": "visit",
+            "id": "v-7730"
+          }
+        ],
+        "source": {
+          "kind": "call",
+          "id": "call-0001"
+        },
+        "saidAt": "2026-11-16T19:30:00-08:00",
+        "doneAt": "2026-11-16T10:12:00-08:00",
+        "statement": "Booked M. Silva for a visit."
+      },
+      "records": [
+        {
+          "tool": "getjobber.com",
+          "id": "v-7730",
+          "kind": "visit",
+          "subjectId": "c-6101",
+          "createdAt": "2026-11-02T09:00:00-08:00",
+          "by": {
+            "via": "api",
+            "app": "urn:example:bot:receptionist-01"
+          },
+          "changedAt": "2026-11-16T10:12:00-08:00"
+        }
+      ],
+      "search": false,
+      "expect": {
+        "result": "matched",
+        "notes": []
+      }
+    },
+    {
+      "name": "Canceled, but the visit hasn't changed since last week: no match",
+      "claim": {
+        "saydo": "0.2",
+        "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
+        "actor": {
+          "kind": "bot",
+          "id": "urn:example:bot:receptionist-01",
+          "name": "AI receptionist",
+          "maker": "Example Voice"
+        },
+        "onBehalfOf": {
+          "id": "urn:example:business:0001",
+          "label": "Rivera Plumbing & Drain"
+        },
+        "delegation": [
+          {
+            "kind": "person",
+            "id": "urn:example:person:0001",
+            "label": "the owner"
+          }
+        ],
+        "action": "canceled",
+        "what": "visit",
+        "subject": {
+          "tool": "getjobber.com",
+          "id": "c-6101",
+          "label": "M. Silva"
+        },
+        "records": [
+          {
+            "tool": "getjobber.com",
+            "kind": "visit",
+            "id": "v-7730"
+          }
+        ],
+        "source": {
+          "kind": "call",
+          "id": "call-0001"
+        },
+        "saidAt": "2026-11-16T19:30:00-08:00",
+        "doneAt": "2026-11-16T10:12:00-08:00",
+        "statement": "Booked M. Silva for a visit."
+      },
+      "records": [
+        {
+          "tool": "getjobber.com",
+          "id": "v-7730",
+          "kind": "visit",
+          "subjectId": "c-6101",
+          "createdAt": "2026-11-02T09:00:00-08:00",
+          "by": {
+            "via": "api",
+            "app": "urn:example:bot:receptionist-01"
+          },
+          "changedAt": "2026-11-05T09:00:00-08:00"
+        }
+      ],
+      "search": false,
+      "expect": {
+        "result": "no_match"
+      }
+    },
+    {
+      "name": "Assigned: the visit changed when the bot says it assigned it",
+      "claim": {
+        "saydo": "0.2",
+        "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
+        "actor": {
+          "kind": "bot",
+          "id": "urn:example:bot:receptionist-01",
+          "name": "AI receptionist",
+          "maker": "Example Voice"
+        },
+        "onBehalfOf": {
+          "id": "urn:example:business:0001",
+          "label": "Rivera Plumbing & Drain"
+        },
+        "delegation": [
+          {
+            "kind": "person",
+            "id": "urn:example:person:0001",
+            "label": "the owner"
+          }
+        ],
+        "action": "assigned",
+        "what": "visit",
+        "subject": {
+          "tool": "getjobber.com",
+          "id": "c-6101",
+          "label": "M. Silva"
+        },
+        "records": [
+          {
+            "tool": "getjobber.com",
+            "kind": "visit",
+            "id": "v-7730"
+          }
+        ],
+        "source": {
+          "kind": "call",
+          "id": "call-0001"
+        },
+        "saidAt": "2026-11-16T19:30:00-08:00",
+        "doneAt": "2026-11-16T10:12:00-08:00",
+        "statement": "Booked M. Silva for a visit."
+      },
+      "records": [
+        {
+          "tool": "getjobber.com",
+          "id": "v-7730",
+          "kind": "visit",
+          "subjectId": "c-6101",
+          "createdAt": "2026-11-02T09:00:00-08:00",
+          "by": {
+            "via": "api",
+            "app": "urn:example:bot:receptionist-01"
+          },
+          "changedAt": "2026-11-16T10:12:00-08:00"
+        }
+      ],
+      "search": false,
+      "expect": {
+        "result": "matched",
+        "notes": []
+      }
+    },
+    {
+      "name": "Refunded: backed by a refund record",
+      "claim": {
+        "saydo": "0.2",
+        "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
+        "actor": {
+          "kind": "bot",
+          "id": "urn:example:bot:receptionist-01",
+          "name": "AI receptionist",
+          "maker": "Example Voice"
+        },
+        "onBehalfOf": {
+          "id": "urn:example:business:0001",
+          "label": "Rivera Plumbing & Drain"
+        },
+        "delegation": [
+          {
+            "kind": "person",
+            "id": "urn:example:person:0001",
+            "label": "the owner"
+          }
+        ],
+        "action": "refunded",
+        "what": "refund",
+        "subject": {
+          "tool": "getjobber.com",
+          "id": "c-6101",
+          "label": "M. Silva"
+        },
+        "records": [
+          {
+            "tool": "getjobber.com",
+            "kind": "refund",
+            "id": "rf-1"
+          }
+        ],
+        "source": {
+          "kind": "call",
+          "id": "call-0001"
+        },
+        "saidAt": "2026-11-16T19:30:00-08:00",
+        "doneAt": "2026-11-16T10:12:00-08:00",
+        "statement": "Booked M. Silva for a visit."
+      },
+      "records": [
+        {
+          "tool": "getjobber.com",
+          "id": "rf-1",
+          "kind": "refund",
+          "subjectId": "c-6101",
+          "createdAt": "2026-11-16T10:12:00-08:00",
+          "by": {
+            "via": "api",
+            "app": "urn:example:bot:receptionist-01"
+          }
+        }
+      ],
+      "search": false,
+      "expect": {
+        "result": "matched",
+        "notes": []
+      }
+    },
+    {
+      "name": "Refunded, but it points at a payment, not a refund: no match",
+      "claim": {
+        "saydo": "0.2",
+        "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
+        "actor": {
+          "kind": "bot",
+          "id": "urn:example:bot:receptionist-01",
+          "name": "AI receptionist",
+          "maker": "Example Voice"
+        },
+        "onBehalfOf": {
+          "id": "urn:example:business:0001",
+          "label": "Rivera Plumbing & Drain"
+        },
+        "delegation": [
+          {
+            "kind": "person",
+            "id": "urn:example:person:0001",
+            "label": "the owner"
+          }
+        ],
+        "action": "refunded",
+        "what": "refund",
+        "subject": {
+          "tool": "getjobber.com",
+          "id": "c-6101",
+          "label": "M. Silva"
+        },
+        "records": [
+          {
+            "tool": "getjobber.com",
+            "kind": "payment",
+            "id": "pm-1"
+          }
+        ],
+        "source": {
+          "kind": "call",
+          "id": "call-0001"
+        },
+        "saidAt": "2026-11-16T19:30:00-08:00",
+        "doneAt": "2026-11-16T10:12:00-08:00",
+        "statement": "Booked M. Silva for a visit."
+      },
+      "records": [
+        {
+          "tool": "getjobber.com",
+          "id": "pm-1",
+          "kind": "payment",
+          "subjectId": "c-6101",
+          "createdAt": "2026-11-16T10:12:00-08:00",
+          "by": {
+            "via": "api",
+            "app": "urn:example:bot:receptionist-01"
+          }
+        }
+      ],
+      "search": false,
+      "expect": {
+        "result": "no_match"
       }
     }
   ]

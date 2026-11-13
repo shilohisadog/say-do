@@ -1,14 +1,17 @@
-// Say-Do v0.1 reference code: validate a claim, check it against records, count the results.
+// Say-Do v0.2 reference code: validate a claim, check it against records, count the results.
 // Pure functions, no dependencies, no clock, no I/O: the caller passes in how to read records. See SPEC.md.
 
-export const VERSION = "0.1";
+export const VERSION = "0.2";
 export const RELATIONS = ["relays", "corrects", "follows"];
-export const RECORD_KINDS = ["client", "lead", "request", "visit", "job", "estimate", "invoice", "payment", "message", "call", "note", "deletion", "other"];
+export const RECORD_KINDS = ["client", "lead", "request", "visit", "job", "estimate", "invoice", "payment", "refund", "message", "call", "note", "deletion", "other"];
 /** SPEC §2: which record kinds can back each action. null = any kind. */
 export const BACKED_BY = {
   created: null, updated: null, sent: ["message"], called: ["call"], booked: ["visit", "job"],
-  invoiced: ["invoice"], paid: ["payment"], deleted: ["deletion"], other: null,
+  canceled: ["visit", "job", "estimate", "request", "invoice"], assigned: ["job", "visit", "lead", "request"],
+  invoiced: ["invoice"], paid: ["payment"], refunded: ["refund"], deleted: ["deletion"], other: null,
 };
+/** Actions checked by when the record last changed, not when it was made (SPEC §4, test 4). */
+export const BY_CHANGE = ["updated", "canceled", "assigned"];
 export const ACTIONS = Object.keys(BACKED_BY);
 export const RESULTS = ["matched", "matched_by_search", "no_match", "cant_check"];
 /** What a reader returns when it can't read the tool at all (as opposed to null: the record isn't there). */
@@ -22,7 +25,7 @@ const isStr = (x) => typeof x === "string" && x.length > 0;
 const isUri = (x) => isStr(x) && /^[A-Za-z][A-Za-z0-9+.-]*:.+$/.test(x);
 const isTime = (x) => isStr(x) && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/.test(x) && !Number.isNaN(Date.parse(x));
 
-/** Problems with a claim, as plain sentences. An empty list means it's valid v0.1. */
+/** Problems with a claim, as plain sentences. An empty list means it's valid v0.2. */
 export function validate(c) {
   const p = [];
   if (!isObj(c)) return ["A claim is a JSON object."];
@@ -51,7 +54,7 @@ export function validate(c) {
   if (!isTime(c.saidAt)) p.push("saidAt is a time with an offset or Z.");
   if (c.doneAt !== undefined) {
     if (!isTime(c.doneAt)) p.push("doneAt, when present, is a time with an offset or Z.");
-    else if (isTime(c.saidAt) && Date.parse(c.doneAt) > Date.parse(c.saidAt)) p.push("doneAt can't be later than saidAt: v0.1 claims are about work already done.");
+    else if (isTime(c.saidAt) && Date.parse(c.doneAt) > Date.parse(c.saidAt)) p.push("doneAt can't be later than saidAt: claims are about work already done.");
   }
   return p;
 }
@@ -85,7 +88,7 @@ export function check(claim, read, search, opts = {}) {
     if (!r) return "isn't there";
     if ((kind && r.kind !== kind) || (allowed && !allowed.includes(r.kind))) return "is the wrong kind of record";
     if (r.subjectId !== claim.subject.id) return "is about someone else";
-    const t = Date.parse(claim.action === "updated" ? (r.changedAt || r.createdAt) : r.createdAt);
+    const t = Date.parse(BY_CHANGE.includes(claim.action) ? (r.changedAt || r.createdAt) : r.createdAt);
     if (t < earliest) return "is older than the work";
     if (r.by?.app && r.by.app !== claim.actor.id) return "was written by another app";
     if (r.by?.via === "ui" && claim.actor.kind === "bot") return "was made by a person in the tool's own screens";

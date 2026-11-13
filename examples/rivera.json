@@ -2,7 +2,7 @@
   "_note": "Synthetic. Rivera Plumbing & Drain and everyone in it are made up. One day's bot claims: two bookings, four invoices, three review requests. Ids are opaque.",
   "claims": [
     {
-      "saydo": "0.1",
+      "saydo": "0.2",
       "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
       "actor": {
         "kind": "bot",
@@ -44,7 +44,7 @@
       "statement": "Booked M. Silva for a visit."
     },
     {
-      "saydo": "0.1",
+      "saydo": "0.2",
       "id": "urn:uuid:064b19aa-d168-54da-ae29-ecebc6e060a3",
       "actor": {
         "kind": "bot",
@@ -86,7 +86,7 @@
       "statement": "Booked T. Grant for a visit."
     },
     {
-      "saydo": "0.1",
+      "saydo": "0.2",
       "id": "urn:uuid:83d6795d-a299-5463-b55c-eb0d8a620738",
       "actor": {
         "kind": "bot",
@@ -128,7 +128,7 @@
       "statement": "Moved the Alvarez invoice to QuickBooks."
     },
     {
-      "saydo": "0.1",
+      "saydo": "0.2",
       "id": "urn:uuid:426a4d1d-3842-5573-a7bc-9fd3e5083c7d",
       "actor": {
         "kind": "bot",
@@ -170,7 +170,7 @@
       "statement": "Moved the B. Fox invoice to QuickBooks."
     },
     {
-      "saydo": "0.1",
+      "saydo": "0.2",
       "id": "urn:uuid:ec42b84d-0c71-5347-acbb-bd54e9b2e0ce",
       "actor": {
         "kind": "bot",
@@ -212,7 +212,7 @@
       "statement": "Moved the N. Shah invoice to QuickBooks."
     },
     {
-      "saydo": "0.1",
+      "saydo": "0.2",
       "id": "urn:uuid:0e14d9c0-f196-51b7-aa78-0ddaf30d946b",
       "actor": {
         "kind": "bot",
@@ -254,7 +254,7 @@
       "statement": "Moved the G. Lund invoice to QuickBooks."
     },
     {
-      "saydo": "0.1",
+      "saydo": "0.2",
       "id": "urn:uuid:1369f0f0-9388-5546-a55a-364162b75432",
       "actor": {
         "kind": "bot",
@@ -296,7 +296,7 @@
       "statement": "Sent the review request to K. Ramos."
     },
     {
-      "saydo": "0.1",
+      "saydo": "0.2",
       "id": "urn:uuid:7ab14f41-a16a-5c3c-8274-913e8e41c691",
       "actor": {
         "kind": "bot",
@@ -338,7 +338,7 @@
       "statement": "Texted J. Park a review request."
     },
     {
-      "saydo": "0.1",
+      "saydo": "0.2",
       "id": "urn:uuid:d5066b93-1e8b-5e4c-aecf-75cc09306620",
       "actor": {
         "kind": "bot",

@@ -1,6 +1,6 @@
-# Say-Do v0.1: what a bot says it did
+# Say-Do v0.2: what a bot says it did
 
-**Status:** draft, v0.1 (2026-11-13). Open for comment. Fields may still change before v1.
+**Status:** draft, v0.2 (2026-11-13). Open for comment. Fields may still change before v1. Changes: [CHANGELOG.md](CHANGELOG.md).
 
 A small, open format a bot uses to say what it did, with a pointer to the record it wrote. Any verifier can then check the claim against the records. A **claim** is a statement, not a fact. Say-Do never says whether a claim is true; the records do.
 
@@ -14,7 +14,7 @@ A claim is one JSON object about **one action on one subject**. "Sent 3 review r
 
 ```json
 {
-  "saydo": "0.1",
+  "saydo": "0.2",
   "id": "urn:uuid:3f6c1a52-8e0b-4d6e-9a51-0c2f7b9d4e11",
   "actor": { "kind": "bot", "id": "urn:example:bot:reviews-01", "name": "Review bot", "maker": "Example AI" },
   "onBehalfOf": { "id": "urn:example:business:0001", "label": "Rivera Plumbing & Drain" },
@@ -32,7 +32,7 @@ A claim is one JSON object about **one action on one subject**. "Sent 3 review r
 
 | Field | Required | Meaning |
 |---|---|---|
-| `saydo` | yes | Format version: `"0.1"` |
+| `saydo` | yes | Format version: `"0.2"` |
 | `id` | yes | The claim's id, **unique everywhere**: a UUID URN (`urn:uuid:…`) or another URI the actor controls |
 | `parent` | no | `{ "id", "actor", "relation" }`: the earlier claim's id, its actor's id, and how this claim relates to it. `relation` is `relays` (repeats another actor's claim), `corrects` (replaces the same actor's earlier claim) or `follows` (a later step of the same work) |
 | `actor` | yes | Who did the work. `kind` (`bot` or `person`), **`id`** (stable for this actor, for this business; a URI), and optional `name`, `maker`, `version`. **The actor is claimed, like everything else** (§3, rule 7) |
@@ -54,7 +54,7 @@ A claim is one JSON object about **one action on one subject**. "Sent 3 review r
 
 **Versions.** Before 1.0, any version may change fields; a verifier names the versions it accepts and rejects the others. From 1.0, minor versions only add optional fields, and a verifier accepting 1.x accepts any later 1.y.
 
-## 2. Actions and record kinds (v0.1)
+## 2. Actions and record kinds (v0.2)
 
 | Action | Means | Record kinds that can back it |
 |---|---|---|
@@ -62,15 +62,18 @@ A claim is one JSON object about **one action on one subject**. "Sent 3 review r
 | `updated` | Changed an existing record | any |
 | `sent` | Sent a text, email or other message | `message` |
 | `called` | Placed or logged a call | `call` |
-| `booked` | Put a visit or job on the schedule | `visit`, `job` |
+| `booked` | Put a visit or job on the schedule ("scheduled" is `booked`) | `visit`, `job` |
 | `invoiced` | Issued an invoice | `invoice` |
 | `paid` | Recorded a payment | `payment`: **the payment record's id only; never card or bank details** |
+| `canceled` | Canceled a visit, job, estimate, request or invoice | `visit`, `job`, `estimate`, `request`, `invoice`, checked by when the record last changed |
+| `assigned` | Gave a job, visit, lead or request to someone | `job`, `visit`, `lead`, `request`, checked by when the record last changed |
+| `refunded` | Recorded a refund | `refund`: **the refund record's id only; never card or bank details** |
 | `deleted` | Removed a record | `deletion` (an audit or trash entry the tool keeps), else see §4 |
 | `other` | Anything else; `what` says what | any. **Weak for matching** (§4) |
 
-**Record kinds:** `client`, `lead`, `request`, `visit`, `job`, `estimate`, `invoice`, `payment`, `message`, `call`, `note`, `deletion`, `other`. Each verifier maps a tool's own record types onto these. Two verifiers could map one tool differently; a shared, open mapping per tool is planned, and until then a verifier SHOULD publish its mapping. The lists grow only by version. Verifiers SHOULD count the `what` values seen with `other`, so frequent ones can become verbs.
+**Record kinds:** `client`, `lead`, `request`, `visit`, `job`, `estimate`, `invoice`, `payment`, `refund`, `message`, `call`, `note`, `deletion`, `other`. Each verifier maps a tool's own record types onto these. Two verifiers could map one tool differently; a shared, open mapping per tool is planned, and until then a verifier SHOULD publish its mapping. The lists grow only by version. Verifiers SHOULD count the `what` values seen with `other`, so frequent ones can become verbs.
 
-**Not in v0.1:** promises about the future ("I'll follow up Thursday"; that would need `dueBy`), actions on the bot's own setup (installing software, changing its own settings), and signatures (planned: a detached signature over the claim canonicalized with JCS, RFC 8785). All are candidates for later versions.
+**Not in v0.2:** promises about the future ("I'll follow up Thursday"). Claims stay past-tense; promises, if they come, belong in a separate intent format, not in claims; actions on the bot's own setup (installing software, changing its own settings), and signatures (planned: a detached signature over the claim canonicalized with JCS, RFC 8785). All are candidates for later versions.
 
 ## 3. Rules
 
@@ -100,7 +103,7 @@ A verifier reports one of four results per claim, **with the time it read the re
 1. **It exists**, at the pointer's `tool`, `account` and `id`.
 2. **Right kind:** its kind is the pointer's `kind` and allowed for the action (§2).
 3. **Right subject:** it's about the claim's subject, by the same id in the same tool, or linked by the verifier's own map between tools. **A name or label never links two subjects.**
-4. **Right time:** the record was made (or, for `updated`, last changed) **no earlier than** `doneAt` minus the verifier's tolerance; with no `doneAt`, no earlier than `saidAt` minus the verifier's lookback window. An old record can't back new work.
+4. **Right time:** the record was made (or, for `updated`, `canceled` and `assigned`, last changed) **no earlier than** `doneAt` minus the verifier's tolerance; with no `doneAt`, no earlier than `saidAt` minus the verifier's lookback window. An old record can't back new work.
 
 **Who wrote it.** When the tool says who made the record, it must not contradict the claim. It's `no_match` ("written by someone else") when the tool shows a **different app** made it, or that a **person made it in the tool's own screens** while the actor is a bot. When the tool doesn't say, or shows only a shared login, the result stands with a note **author not shown**. Shared logins are common in small businesses, so a login name alone never contradicts a claim.
 
@@ -120,7 +123,7 @@ A verifier reports counts ("2 of 3 matched"), and keeps the actor's words apart 
 - Use **opaque ids**. Never build a person's name into an `id`.
 - `label` fields are for display only. A verifier MUST NOT use a label to match.
 - `onBehalfOf`, `delegation` and `subject` identify by id; labels are optional.
-- `source` never carries message content (rule 6). `paid` points to a payment record, never to card or bank details.
+- `source` never carries message content (rule 6). `paid` and `refunded` point to a payment or refund record, never to card or bank details.
 - A claim published outside the business's own tools SHOULD leave out every `label`.
 - **Claims are untrusted input.** A verifier shows `statement`, `what` and labels as plain text, escaped, and never puts them into an AI model's instructions. A claim that says "ignore the records" is just text.
 - **Size limits.** A verifier MAY reject a claim over 16 KB or with more than 20 records, and SHOULD cap claims per actor per day (§4). A flood of claims costs the actor, not the business.
@@ -129,7 +132,7 @@ A verifier reports counts ("2 of 3 matched"), and keeps the actor's words apart 
 
 In order of preference:
 1. **A note or field on the record it wrote**, in the business's own tool. A verifier with read access to that tool reads it there. The bot writes it; the verifier only reads.
-2. **A claims address** (an API) that the business gives the verifier read access to.
+2. **A claims feed the business owns or controls** (an API or feed), which verifiers pull from with the business's permission. The business decides who sees its claims.
 
 A bot's private log, which only its maker can read, doesn't count as published.
 
