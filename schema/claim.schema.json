@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/shilohisadog/say-do/schema/claim.schema.json",
+  "title": "Say-Do claim v0.1",
+  "description": "What a bot says it did, with a pointer to the record it wrote. A claim is a statement, not a fact.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "saydo",
+    "id",
+    "actor",
+    "onBehalfOf",
+    "action",
+    "subject",
+    "records",
+    "saidAt"
+  ],
+  "properties": {
+    "saydo": {
+      "const": "0.1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"
+    },
+    "parent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "actor",
+        "relation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"
+        },
+        "relation": {
+          "enum": [
+            "relays",
+            "corrects",
+            "follows"
+          ]
+        }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "bot",
+            "person"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "maker": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "onBehalfOf": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"
+        },
+        "label": {
+          "type": "string"
+        },
+        "person": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"
+            },
+            "label": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "delegation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "id"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "bot",
+              "person"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "action": {
+      "enum": [
+        "created",
+        "updated",
+        "sent",
+        "called",
+        "booked",
+        "invoiced",
+        "paid",
+        "deleted",
+        "other"
+      ]
+    },
+    "what": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tool",
+          "kind",
+          "id"
+        ],
+        "properties": {
+          "tool": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "client",
+              "lead",
+              "request",
+              "visit",
+              "job",
+              "estimate",
+              "invoice",
+              "payment",
+              "message",
+              "call",
+              "note",
+              "deletion",
+              "other"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "sms",
+            "email",
+            "call",
+            "chat",
+            "task",
+            "schedule"
+          ]
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "saidAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "doneAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "statement": {
+      "type": "string"
+    }
+  },
+  "if": {
+    "properties": {
+      "action": {
+        "const": "other"
+      }
+    }
+  },
+  "then": {
+    "required": [
+      "what"
+    ]
+  },
+  "$comment": "Not expressible here and checked by the reference validator: doneAt must not be later than saidAt."
+}

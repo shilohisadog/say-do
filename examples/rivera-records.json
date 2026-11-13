@@ -1,0 +1,61 @@
+{
+  "_note": "Synthetic records the claims are checked against, as a verifier's reader returns them: subjectId is already in the claims' subject namespace (Jobber client ids), so QuickBooks invoices carry the Jobber client they map to. The message for K. Ramos (msg-88412) is deliberately absent.",
+  "records": [
+    {
+      "tool": "Jobber",
+      "id": "v-7730",
+      "kind": "visit",
+      "subjectId": "c-6101",
+      "at": "2026-11-16T10:12:00-08:00"
+    },
+    {
+      "tool": "Jobber",
+      "id": "v-7731",
+      "kind": "visit",
+      "subjectId": "c-6102",
+      "at": "2026-11-16T14:48:00-08:00"
+    },
+    {
+      "tool": "QuickBooks",
+      "id": "inv-9100",
+      "kind": "invoice",
+      "subjectId": "c-5480",
+      "at": "2026-11-16T16:05:00-08:00"
+    },
+    {
+      "tool": "QuickBooks",
+      "id": "inv-9101",
+      "kind": "invoice",
+      "subjectId": "c-5493",
+      "at": "2026-11-16T16:40:00-08:00"
+    },
+    {
+      "tool": "QuickBooks",
+      "id": "inv-9102",
+      "kind": "invoice",
+      "subjectId": "c-5502",
+      "at": "2026-11-16T17:15:00-08:00"
+    },
+    {
+      "tool": "QuickBooks",
+      "id": "inv-9103",
+      "kind": "invoice",
+      "subjectId": "c-5507",
+      "at": "2026-11-16T17:50:00-08:00"
+    },
+    {
+      "tool": "Jobber",
+      "id": "msg-88390",
+      "kind": "message",
+      "subjectId": "c-5515",
+      "at": "2026-11-16T16:10:00-08:00"
+    },
+    {
+      "tool": "Jobber",
+      "id": "msg-88401",
+      "kind": "message",
+      "subjectId": "c-5518",
+      "at": "2026-11-16T17:30:00-08:00"
+    }
+  ]
+}

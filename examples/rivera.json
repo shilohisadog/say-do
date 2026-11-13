@@ -1,0 +1,383 @@
+{
+  "_note": "Synthetic. Rivera Plumbing & Drain and everyone in it are made up. One day's bot claims: two bookings, four invoices, three review requests. Ids are opaque.",
+  "claims": [
+    {
+      "saydo": "0.1",
+      "id": "urn:uuid:531da372-ad53-51c7-9adc-8635d567553a",
+      "actor": {
+        "kind": "bot",
+        "id": "urn:example:bot:receptionist-01",
+        "name": "AI receptionist",
+        "maker": "Example Voice"
+      },
+      "onBehalfOf": {
+        "id": "urn:example:business:0001",
+        "label": "Rivera Plumbing & Drain"
+      },
+      "delegation": [
+        {
+          "kind": "person",
+          "id": "urn:example:person:0001",
+          "label": "the owner"
+        }
+      ],
+      "action": "booked",
+      "what": "visit",
+      "subject": {
+        "tool": "Jobber",
+        "id": "c-6101",
+        "label": "M. Silva"
+      },
+      "records": [
+        {
+          "tool": "Jobber",
+          "kind": "visit",
+          "id": "v-7730"
+        }
+      ],
+      "source": {
+        "kind": "call",
+        "id": "call-0001"
+      },
+      "saidAt": "2026-11-16T19:30:00-08:00",
+      "doneAt": "2026-11-16T10:12:00-08:00",
+      "statement": "Booked M. Silva for a visit."
+    },
+    {
+      "saydo": "0.1",
+      "id": "urn:uuid:064b19aa-d168-54da-ae29-ecebc6e060a3",
+      "actor": {
+        "kind": "bot",
+        "id": "urn:example:bot:receptionist-01",
+        "name": "AI receptionist",
+        "maker": "Example Voice"
+      },
+      "onBehalfOf": {
+        "id": "urn:example:business:0001",
+        "label": "Rivera Plumbing & Drain"
+      },
+      "delegation": [
+        {
+          "kind": "person",
+          "id": "urn:example:person:0001",
+          "label": "the owner"
+        }
+      ],
+      "action": "booked",
+      "what": "visit",
+      "subject": {
+        "tool": "Jobber",
+        "id": "c-6102",
+        "label": "T. Grant"
+      },
+      "records": [
+        {
+          "tool": "Jobber",
+          "kind": "visit",
+          "id": "v-7731"
+        }
+      ],
+      "source": {
+        "kind": "call",
+        "id": "call-0002"
+      },
+      "saidAt": "2026-11-16T19:30:00-08:00",
+      "doneAt": "2026-11-16T14:48:00-08:00",
+      "statement": "Booked T. Grant for a visit."
+    },
+    {
+      "saydo": "0.1",
+      "id": "urn:uuid:83d6795d-a299-5463-b55c-eb0d8a620738",
+      "actor": {
+        "kind": "bot",
+        "id": "urn:example:bot:assistant-01",
+        "name": "Office bot",
+        "maker": "Example AI"
+      },
+      "onBehalfOf": {
+        "id": "urn:example:business:0001",
+        "label": "Rivera Plumbing & Drain"
+      },
+      "delegation": [
+        {
+          "kind": "person",
+          "id": "urn:example:person:0001",
+          "label": "the owner"
+        }
+      ],
+      "action": "invoiced",
+      "what": "invoice",
+      "subject": {
+        "tool": "Jobber",
+        "id": "c-5480",
+        "label": "Alvarez"
+      },
+      "records": [
+        {
+          "tool": "QuickBooks",
+          "kind": "invoice",
+          "id": "inv-9100"
+        }
+      ],
+      "source": {
+        "kind": "task",
+        "id": "task-9100"
+      },
+      "saidAt": "2026-11-16T20:00:00-08:00",
+      "doneAt": "2026-11-16T16:05:00-08:00",
+      "statement": "Moved the Alvarez invoice to QuickBooks."
+    },
+    {
+      "saydo": "0.1",
+      "id": "urn:uuid:426a4d1d-3842-5573-a7bc-9fd3e5083c7d",
+      "actor": {
+        "kind": "bot",
+        "id": "urn:example:bot:assistant-01",
+        "name": "Office bot",
+        "maker": "Example AI"
+      },
+      "onBehalfOf": {
+        "id": "urn:example:business:0001",
+        "label": "Rivera Plumbing & Drain"
+      },
+      "delegation": [
+        {
+          "kind": "person",
+          "id": "urn:example:person:0001",
+          "label": "the owner"
+        }
+      ],
+      "action": "invoiced",
+      "what": "invoice",
+      "subject": {
+        "tool": "Jobber",
+        "id": "c-5493",
+        "label": "B. Fox"
+      },
+      "records": [
+        {
+          "tool": "QuickBooks",
+          "kind": "invoice",
+          "id": "inv-9101"
+        }
+      ],
+      "source": {
+        "kind": "task",
+        "id": "task-9101"
+      },
+      "saidAt": "2026-11-16T20:00:00-08:00",
+      "doneAt": "2026-11-16T16:40:00-08:00",
+      "statement": "Moved the B. Fox invoice to QuickBooks."
+    },
+    {
+      "saydo": "0.1",
+      "id": "urn:uuid:ec42b84d-0c71-5347-acbb-bd54e9b2e0ce",
+      "actor": {
+        "kind": "bot",
+        "id": "urn:example:bot:assistant-01",
+        "name": "Office bot",
+        "maker": "Example AI"
+      },
+      "onBehalfOf": {
+        "id": "urn:example:business:0001",
+        "label": "Rivera Plumbing & Drain"
+      },
+      "delegation": [
+        {
+          "kind": "person",
+          "id": "urn:example:person:0001",
+          "label": "the owner"
+        }
+      ],
+      "action": "invoiced",
+      "what": "invoice",
+      "subject": {
+        "tool": "Jobber",
+        "id": "c-5502",
+        "label": "N. Shah"
+      },
+      "records": [
+        {
+          "tool": "QuickBooks",
+          "kind": "invoice",
+          "id": "inv-9102"
+        }
+      ],
+      "source": {
+        "kind": "task",
+        "id": "task-9102"
+      },
+      "saidAt": "2026-11-16T20:00:00-08:00",
+      "doneAt": "2026-11-16T17:15:00-08:00",
+      "statement": "Moved the N. Shah invoice to QuickBooks."
+    },
+    {
+      "saydo": "0.1",
+      "id": "urn:uuid:0e14d9c0-f196-51b7-aa78-0ddaf30d946b",
+      "actor": {
+        "kind": "bot",
+        "id": "urn:example:bot:assistant-01",
+        "name": "Office bot",
+        "maker": "Example AI"
+      },
+      "onBehalfOf": {
+        "id": "urn:example:business:0001",
+        "label": "Rivera Plumbing & Drain"
+      },
+      "delegation": [
+        {
+          "kind": "person",
+          "id": "urn:example:person:0001",
+          "label": "the owner"
+        }
+      ],
+      "action": "invoiced",
+      "what": "invoice",
+      "subject": {
+        "tool": "Jobber",
+        "id": "c-5507",
+        "label": "G. Lund"
+      },
+      "records": [
+        {
+          "tool": "QuickBooks",
+          "kind": "invoice",
+          "id": "inv-9103"
+        }
+      ],
+      "source": {
+        "kind": "task",
+        "id": "task-9103"
+      },
+      "saidAt": "2026-11-16T20:00:00-08:00",
+      "doneAt": "2026-11-16T17:50:00-08:00",
+      "statement": "Moved the G. Lund invoice to QuickBooks."
+    },
+    {
+      "saydo": "0.1",
+      "id": "urn:uuid:1369f0f0-9388-5546-a55a-364162b75432",
+      "actor": {
+        "kind": "bot",
+        "id": "urn:example:bot:assistant-01",
+        "name": "Office bot",
+        "maker": "Example AI"
+      },
+      "onBehalfOf": {
+        "id": "urn:example:business:0001",
+        "label": "Rivera Plumbing & Drain"
+      },
+      "delegation": [
+        {
+          "kind": "person",
+          "id": "urn:example:person:0001",
+          "label": "the owner"
+        }
+      ],
+      "action": "sent",
+      "what": "review request",
+      "subject": {
+        "tool": "Jobber",
+        "id": "c-5521",
+        "label": "K. Ramos"
+      },
+      "records": [
+        {
+          "tool": "Jobber",
+          "kind": "message",
+          "id": "msg-88412"
+        }
+      ],
+      "source": {
+        "kind": "task",
+        "id": "task-5521"
+      },
+      "saidAt": "2026-11-16T18:02:00-08:00",
+      "doneAt": "2026-11-16T18:01:00-08:00",
+      "statement": "Sent the review request to K. Ramos."
+    },
+    {
+      "saydo": "0.1",
+      "id": "urn:uuid:7ab14f41-a16a-5c3c-8274-913e8e41c691",
+      "actor": {
+        "kind": "bot",
+        "id": "urn:example:bot:assistant-01",
+        "name": "Office bot",
+        "maker": "Example AI"
+      },
+      "onBehalfOf": {
+        "id": "urn:example:business:0001",
+        "label": "Rivera Plumbing & Drain"
+      },
+      "delegation": [
+        {
+          "kind": "person",
+          "id": "urn:example:person:0001",
+          "label": "the owner"
+        }
+      ],
+      "action": "sent",
+      "what": "review request",
+      "subject": {
+        "tool": "Jobber",
+        "id": "c-5515",
+        "label": "J. Park"
+      },
+      "records": [
+        {
+          "tool": "Jobber",
+          "kind": "message",
+          "id": "msg-88390"
+        }
+      ],
+      "source": {
+        "kind": "task",
+        "id": "task-5515"
+      },
+      "saidAt": "2026-11-16T18:02:00-08:00",
+      "doneAt": "2026-11-16T16:10:00-08:00",
+      "statement": "Texted J. Park a review request."
+    },
+    {
+      "saydo": "0.1",
+      "id": "urn:uuid:d5066b93-1e8b-5e4c-aecf-75cc09306620",
+      "actor": {
+        "kind": "bot",
+        "id": "urn:example:bot:assistant-01",
+        "name": "Office bot",
+        "maker": "Example AI"
+      },
+      "onBehalfOf": {
+        "id": "urn:example:business:0001",
+        "label": "Rivera Plumbing & Drain"
+      },
+      "delegation": [
+        {
+          "kind": "person",
+          "id": "urn:example:person:0001",
+          "label": "the owner"
+        }
+      ],
+      "action": "sent",
+      "what": "review request",
+      "subject": {
+        "tool": "Jobber",
+        "id": "c-5518",
+        "label": "L. Ortega"
+      },
+      "records": [
+        {
+          "tool": "Jobber",
+          "kind": "message",
+          "id": "msg-88401"
+        }
+      ],
+      "source": {
+        "kind": "task",
+        "id": "task-5518"
+      },
+      "saidAt": "2026-11-16T18:02:00-08:00",
+      "doneAt": "2026-11-16T17:30:00-08:00",
+      "statement": "Emailed L. Ortega a review request."
+    }
+  ]
+}
