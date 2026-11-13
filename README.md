@@ -30,6 +30,7 @@ A verifier reads `msg-88412` in Jobber and reports one of: **matched**, **matche
 | [`schema/claim.schema.json`](schema/claim.schema.json) | JSON Schema (2020-12) for one claim |
 | [`saydo.js`](saydo.js) | Reference validator and checker. No dependencies |
 | [`examples/`](examples/) | One synthetic day of claims from a made-up plumbing business, the records they're checked against, and **conformance vectors** (`vectors.json`): claims, records and expected results, including the attacks below |
+| [`PRIOR-ART.md`](PRIOR-ART.md) | What we checked before writing this, with sources (2026-11-13) |
 | [`saydo.test.js`](saydo.test.js) | Tests: `node --test` (Node 20 or later) |
 
 ## Status
@@ -44,7 +45,7 @@ Open questions:
 
 ## Questions we expect
 
-**Isn't this just another standard?** Bots already speak A2A, MCP and OpenTelemetry, and Say-Do rides on them rather than replacing them. None of them has a field for the record an action wrote, kept apart from any verdict. That one pointer is what Say-Do adds. If an existing standard adds it, we'll point there.
+**Isn't this just another standard?** Bots already speak A2A, MCP and OpenTelemetry, and Say-Do rides on them rather than replacing them. None of them has a field for the record an action wrote, kept apart from any verdict. That one pointer is what Say-Do adds. We looked first: [PRIOR-ART.md](PRIOR-ART.md) lists what we checked, what each effort covers and its sources. If an existing standard adds a record pointer, we'll point there.
 
 **Can't a bot claim credit for a record it didn't write?** A match needs the record to be the right kind, about the right subject, made no earlier than the work, and not shown by the tool as made by another app or by a person in the tool's own screens. When the tool doesn't say who made it, the result carries "author not shown".
 

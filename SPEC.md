@@ -150,6 +150,8 @@ Each binding gets a worked example before v1. Extension URIs and attribute names
 
 ## 9. Related work
 
+The full survey, with what each effort covers and its sources: [PRIOR-ART.md](PRIOR-ART.md).
+
 Say-Do borrows names where they exist and adds what we didn't find elsewhere: **a pointer to the record the action wrote, kept apart from any verdict.**
 - **W3C PROV:** `actedOnBehalfOf`, delegation.
 - **IETF drafts:** draft-kuehlewind-audit-architecture (actor, on-behalf-of and a delegation chain, read by an independent auditor); draft-sharif-agent-audit-trail (agent audit records).
